@@ -1,0 +1,15 @@
+//! Vitae: API REST para cadastro de currículos.
+//!
+//! Camadas: `handlers` (HTTP) → `services` (regras de negócio) → `repositories` (SQL).
+
+pub mod auth;
+pub mod config;
+pub mod dtos;
+pub mod error;
+pub mod extractors;
+pub mod handlers;
+pub mod models;
+pub mod repositories;
+pub mod routes;
+pub mod services;
+pub mod state;
