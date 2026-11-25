@@ -7,8 +7,6 @@ use super::jwt::verify_token;
 use crate::error::AppError;
 use crate::state::AppState;
 
-/// Usuário autenticado. Basta declará-lo como parâmetro do handler para
-/// exigir um header `Authorization: Bearer <token>` válido.
 pub struct AuthUser {
     pub id: Uuid,
 }

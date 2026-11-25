@@ -32,7 +32,7 @@ pub struct CreateCertificationRequest {
     pub url: Option<String>,
 }
 
-/// Todos os campos são opcionais: só o que for enviado é alterado.
+
 #[derive(Debug, Deserialize, Validate)]
 pub struct UpdateCertificationRequest {
     #[validate(length(

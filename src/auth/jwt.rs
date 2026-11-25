@@ -7,12 +7,9 @@ use uuid::Uuid;
 use crate::error::{AppError, AppResult};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Claims {
-    /// Id do usuário dono do token.
-    pub sub: Uuid,
-    /// Momento de emissão (segundos desde a época Unix).
-    pub iat: i64,
-    /// Momento de expiração (segundos desde a época Unix).
+pub struct Claims {    
+    pub sub: Uuid,    
+    pub iat: i64,    
     pub exp: i64,
 }
 
@@ -32,8 +29,7 @@ pub fn create_token(user_id: Uuid, secret: &str, ttl_hours: i64) -> AppResult<St
     .map_err(|e| AppError::Internal(format!("falha ao gerar token: {e}")))
 }
 
-pub fn verify_token(token: &str, secret: &str) -> AppResult<Claims> {
-    // Aceita somente HS256 e valida `exp` (padrão da crate).
+pub fn verify_token(token: &str, secret: &str) -> AppResult<Claims> {    
     let validation = Validation::new(Algorithm::HS256);
 
     decode::<Claims>(
@@ -76,7 +72,7 @@ mod tests {
 
     #[test]
     fn token_expirado_e_rejeitado() {
-        // TTL bem negativo gera um token já vencido (a crate tolera 60s de diferença).
+        
         let token = create_token(Uuid::from_u128(42), SECRET, -1).unwrap();
 
         let result = verify_token(&token, SECRET);

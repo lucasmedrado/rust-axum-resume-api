@@ -50,7 +50,7 @@ pub struct CreateProfileRequest {
     pub bio: Option<String>,
 }
 
-/// Todos os campos são opcionais: só o que for enviado é alterado.
+
 #[derive(Debug, Deserialize, Validate)]
 pub struct UpdateProfileRequest {
     #[validate(length(

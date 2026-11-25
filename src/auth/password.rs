@@ -1,8 +1,3 @@
-//! Hash e verificação de senhas com Argon2.
-//!
-//! Argon2 é intencionalmente caro em CPU, por isso as versões `async` rodam em
-//! `spawn_blocking` para não travar as threads que atendem requisições.
-
 use argon2::Argon2;
 use argon2::password_hash::rand_core::OsRng;
 use argon2::password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString};

@@ -6,7 +6,7 @@ use validator::Validate;
 use crate::models::user::User;
 
 const PASSWORD_MIN: u64 = 8;
-// Limite superior evita que alguém envie senhas gigantes para sobrecarregar o Argon2.
+
 const PASSWORD_MAX: u64 = 128;
 
 #[derive(Debug, Deserialize, Validate)]
@@ -31,8 +31,7 @@ pub struct LoginRequest {
     pub password: String,
 }
 
-/// Atualização do próprio usuário. A senha atual é sempre exigida,
-/// pois trocar email ou senha são operações sensíveis.
+
 #[derive(Debug, Deserialize, Validate)]
 pub struct UpdateUserRequest {
     #[validate(length(min = 1, max = PASSWORD_MAX, message = "Informe a senha atual"))]
@@ -49,7 +48,7 @@ pub struct UpdateUserRequest {
     pub new_password: Option<String>,
 }
 
-/// Representação pública do usuário: nunca inclui o hash da senha.
+
 #[derive(Debug, Serialize)]
 pub struct UserResponse {
     pub id: Uuid,

@@ -7,8 +7,7 @@ use crate::dtos::academic_education::{
 use crate::error::{AppError, AppResult, is_check_violation};
 use crate::models::academic_education::AcademicEducation;
 
-// Todas as consultas ligam `academic_educations` a `profiles` para garantir que
-// o registro pertence ao usuário autenticado.
+
 
 pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<AcademicEducation>> {
     let educations = sqlx::query_as::<_, AcademicEducation>(
@@ -25,7 +24,7 @@ pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<Acad
     Ok(educations)
 }
 
-/// Devolve `None` quando o usuário ainda não tem perfil.
+
 pub async fn create(
     pool: &PgPool,
     user_id: Uuid,
@@ -49,8 +48,7 @@ pub async fn create(
     .map_err(map_write_error)
 }
 
-/// Atualiza apenas os campos `Some`. Devolve `None` se a formação não existe
-/// ou não pertence ao usuário.
+
 pub async fn update(
     pool: &PgPool,
     user_id: Uuid,
@@ -80,7 +78,7 @@ pub async fn update(
     .map_err(map_write_error)
 }
 
-/// Devolve `true` se a formação existia, era do usuário e foi removida.
+
 pub async fn delete(pool: &PgPool, user_id: Uuid, education_id: Uuid) -> AppResult<bool> {
     let result = sqlx::query(
         "DELETE FROM academic_educations ae

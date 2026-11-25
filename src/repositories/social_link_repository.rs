@@ -5,8 +5,7 @@ use crate::dtos::social_link::{CreateSocialLinkRequest, UpdateSocialLinkRequest}
 use crate::error::{AppError, AppResult, is_check_violation, unique_violation};
 use crate::models::social_link::SocialLink;
 
-// Todas as consultas ligam `social_links` a `profiles` para garantir que
-// o link social pertence ao usuário autenticado.
+
 
 pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<SocialLink>> {
     let links = sqlx::query_as::<_, SocialLink>(
@@ -23,7 +22,7 @@ pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<Soci
     Ok(links)
 }
 
-/// Devolve `None` quando o usuário ainda não tem perfil.
+
 pub async fn create(
     pool: &PgPool,
     user_id: Uuid,
@@ -44,8 +43,7 @@ pub async fn create(
     .map_err(map_write_error)
 }
 
-/// Atualiza apenas os campos `Some`. Devolve `None` se o link social não existe
-/// ou não pertence ao usuário.
+
 pub async fn update(
     pool: &PgPool,
     user_id: Uuid,
@@ -69,7 +67,7 @@ pub async fn update(
     .map_err(map_write_error)
 }
 
-/// Devolve `true` se o link social existia, era do usuário e foi removido.
+
 pub async fn delete(pool: &PgPool, user_id: Uuid, social_link_id: Uuid) -> AppResult<bool> {
     let result = sqlx::query(
         "DELETE FROM social_links sl

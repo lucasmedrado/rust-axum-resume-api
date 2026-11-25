@@ -5,8 +5,7 @@ use crate::dtos::certification::{CreateCertificationRequest, UpdateCertification
 use crate::error::{AppError, AppResult, is_check_violation};
 use crate::models::certification::Certification;
 
-// Todas as consultas ligam `certifications` a `profiles` para garantir que
-// a certificação pertence ao usuário autenticado.
+
 
 pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<Certification>> {
     let certifications = sqlx::query_as::<_, Certification>(
@@ -23,7 +22,7 @@ pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<Cert
     Ok(certifications)
 }
 
-/// Devolve `None` quando o usuário ainda não tem perfil.
+
 pub async fn create(
     pool: &PgPool,
     user_id: Uuid,
@@ -46,8 +45,7 @@ pub async fn create(
     .map_err(map_write_error)
 }
 
-/// Atualiza apenas os campos `Some`. Devolve `None` se a certificação não existe
-/// ou não pertence ao usuário.
+
 pub async fn update(
     pool: &PgPool,
     user_id: Uuid,
@@ -75,7 +73,7 @@ pub async fn update(
     .map_err(map_write_error)
 }
 
-/// Devolve `true` se a certificação existia, era do usuário e foi removida.
+
 pub async fn delete(pool: &PgPool, user_id: Uuid, certification_id: Uuid) -> AppResult<bool> {
     let result = sqlx::query(
         "DELETE FROM certifications c

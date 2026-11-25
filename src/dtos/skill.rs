@@ -20,7 +20,7 @@ pub struct CreateSkillRequest {
     pub level: Option<String>,
 }
 
-/// Todos os campos são opcionais: só o que for enviado é alterado.
+
 #[derive(Debug, Deserialize, Validate)]
 pub struct UpdateSkillRequest {
     #[validate(length(

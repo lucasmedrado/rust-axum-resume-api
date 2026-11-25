@@ -1,8 +1,3 @@
-//! Testes de integração: sobem o roteador completo e fazem requisições HTTP em memória
-//! contra um Postgres real. `#[sqlx::test]` cria um banco novo (com as migrations) para cada teste.
-//!
-//! Requer a variável `DATABASE_URL` apontando para um Postgres cujo usuário possa criar bancos.
-
 use axum::Router;
 use axum::body::Body;
 use axum::http::header::{AUTHORIZATION, CONTENT_TYPE};
@@ -64,7 +59,7 @@ async fn send(
     (status, json)
 }
 
-/// Cadastra um usuário e devolve o token.
+
 async fn register(app: &Router, email: &str) -> String {
     let (status, body) = send(
         app,
@@ -102,7 +97,7 @@ fn experience_body() -> Value {
     })
 }
 
-// ---------- usuários e autenticação ----------
+
 
 #[sqlx::test]
 async fn cadastro_login_e_consulta_do_proprio_usuario(pool: PgPool) {
@@ -110,13 +105,13 @@ async fn cadastro_login_e_consulta_do_proprio_usuario(pool: PgPool) {
 
     let token = register(&app, "Maria@Exemplo.com").await;
 
-    // O token do cadastro já funciona; o email é normalizado e o hash nunca vaza.
+   
     let (status, me) = send(&app, Method::GET, "/users/me", Some(&token), None).await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(me["email"], "maria@exemplo.com");
     assert!(me.get("password_hash").is_none());
 
-    // Login com a senha correta (ignorando maiúsculas no email).
+    
     let (status, login) = send(
         &app,
         Method::POST,
@@ -227,7 +222,7 @@ async fn troca_de_senha_exige_senha_atual_e_vale_no_proximo_login(pool: PgPool) 
     .await;
     assert_eq!(status, StatusCode::UNAUTHORIZED);
 
-    // Senha atual correta
+    
     let (status, _) = send(
         &app,
         Method::PATCH,
@@ -290,7 +285,7 @@ async fn ciclo_completo_do_perfil(pool: PgPool) {
 
     create_profile(&app, &token, "maria-silva").await;
 
-    // Atualização parcial: só o que foi enviado muda
+   
     let (status, updated) = send(
         &app,
         Method::PATCH,
@@ -347,7 +342,7 @@ async fn perfil_com_slug_invalido_retorna_422(pool: PgPool) {
     assert!(body["fields"]["slug"].is_array());
 }
 
-// ---------- experiências ----------
+
 
 #[sqlx::test]
 async fn ciclo_completo_de_experiencias(pool: PgPool) {
@@ -355,7 +350,7 @@ async fn ciclo_completo_de_experiencias(pool: PgPool) {
     let token = register(&app, "maria@exemplo.com").await;
     create_profile(&app, &token, "maria-silva").await;
 
-    // Cria duas
+    
     let (status, primeira) = send(
         &app,
         Method::POST,
@@ -378,13 +373,13 @@ async fn ciclo_completo_de_experiencias(pool: PgPool) {
     .await;
     assert_eq!(status, StatusCode::CREATED);
 
-    // Lista (mais recente primeiro)
+    
     let (status, lista) = send(&app, Method::GET, "/experiences", Some(&token), None).await;
     assert_eq!(status, StatusCode::OK);
     assert_eq!(lista.as_array().unwrap().len(), 2);
     assert_eq!(lista[0]["company_name"], "Acme");
 
-    // Atualiza SÓ a primeira (a segunda não pode ser afetada)
+    
     let id = primeira["id"].as_str().unwrap();
     let (status, atualizada) = send(
         &app,
@@ -401,7 +396,7 @@ async fn ciclo_completo_de_experiencias(pool: PgPool) {
     let (_, lista) = send(&app, Method::GET, "/experiences", Some(&token), None).await;
     assert_eq!(lista[1]["position"], "Estagiária");
 
-    // Remove
+    
     let (status, _) = send(
         &app,
         Method::DELETE,
@@ -477,7 +472,7 @@ async fn periodo_invalido_de_experiencia_retorna_422(pool: PgPool) {
     let token = register(&app, "maria@exemplo.com").await;
     create_profile(&app, &token, "maria-silva").await;
 
-    // Validação do DTO (as duas datas na requisição)
+   
     let (status, _) = send(
         &app,
         Method::POST,
@@ -491,7 +486,7 @@ async fn periodo_invalido_de_experiencia_retorna_422(pool: PgPool) {
     .await;
     assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
 
-    // Validação do banco (só end_date na requisição, contra start_date já salva)
+    
     let (_, criada) = send(
         &app,
         Method::POST,
@@ -511,7 +506,7 @@ async fn periodo_invalido_de_experiencia_retorna_422(pool: PgPool) {
     assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
 }
 
-// ---------- diversos ----------
+
 
 #[sqlx::test]
 async fn health_e_rota_inexistente(pool: PgPool) {
@@ -525,7 +520,7 @@ async fn health_e_rota_inexistente(pool: PgPool) {
     assert_eq!(status, StatusCode::NOT_FOUND);
 }
 
-// ---------- formações acadêmicas ----------
+
 
 #[sqlx::test]
 async fn ciclo_completo_de_formacoes_academicas(pool: PgPool) {
@@ -596,7 +591,7 @@ async fn formacao_academica_isolamento_e_validacao(pool: PgPool) {
     .await;
     let uri = format!("/academic-educations/{}", criada["id"].as_str().unwrap());
 
-    // João não consegue editar nem apagar formação de Maria
+    
     assert_eq!(
         send(&app, Method::PATCH, &uri, Some(&joao), Some(json!({ "institution": "Hack" }))).await.0,
         StatusCode::NOT_FOUND
@@ -606,7 +601,7 @@ async fn formacao_academica_isolamento_e_validacao(pool: PgPool) {
         StatusCode::NOT_FOUND
     );
 
-    // Período inválido no banco (end_date < start_date salvo)
+    
     assert_eq!(
         send(&app, Method::PATCH, &uri, Some(&maria), Some(json!({ "end_date": "2019-01-01" }))).await.0,
         StatusCode::UNPROCESSABLE_ENTITY

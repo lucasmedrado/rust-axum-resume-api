@@ -67,7 +67,7 @@ fn required(name: &'static str) -> Result<String, ConfigError> {
     env::var(name).map_err(|_| ConfigError::Missing(name))
 }
 
-/// Lê uma variável opcional e converte para `T`; usa `default` se ela não existir.
+
 fn parse_or<T>(name: &'static str, default: T) -> Result<T, ConfigError>
 where
     T: std::str::FromStr,

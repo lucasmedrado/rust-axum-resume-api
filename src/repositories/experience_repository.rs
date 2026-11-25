@@ -5,8 +5,6 @@ use crate::dtos::experience::{CreateExperienceRequest, UpdateExperienceRequest};
 use crate::error::{AppError, AppResult, is_check_violation};
 use crate::models::experience::Experience;
 
-// Todas as consultas ligam `experiences` a `profiles` para garantir que a
-// experiência pertence ao usuário autenticado (e não a outro).
 
 pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<Experience>> {
     let experiences = sqlx::query_as::<_, Experience>(
@@ -23,7 +21,7 @@ pub async fn list_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Vec<Expe
     Ok(experiences)
 }
 
-/// Devolve `None` quando o usuário ainda não tem perfil.
+
 pub async fn create(
     pool: &PgPool,
     user_id: Uuid,
@@ -47,8 +45,7 @@ pub async fn create(
     .map_err(map_write_error)
 }
 
-/// Atualiza apenas os campos `Some`. Devolve `None` se a experiência não existe
-/// ou não pertence ao usuário.
+
 pub async fn update(
     pool: &PgPool,
     user_id: Uuid,
@@ -78,7 +75,7 @@ pub async fn update(
     .map_err(map_write_error)
 }
 
-/// Devolve `true` se a experiência existia, era do usuário e foi removida.
+
 pub async fn delete(pool: &PgPool, user_id: Uuid, experience_id: Uuid) -> AppResult<bool> {
     let result = sqlx::query(
         "DELETE FROM experiences e

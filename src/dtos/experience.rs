@@ -31,7 +31,7 @@ pub struct CreateExperienceRequest {
     pub description: Option<String>,
 }
 
-/// Todos os campos são opcionais: só o que for enviado é alterado.
+
 #[derive(Debug, Deserialize, Validate)]
 #[validate(schema(function = "validate_update_period"))]
 pub struct UpdateExperienceRequest {
@@ -103,8 +103,7 @@ fn validate_period(request: &CreateExperienceRequest) -> Result<(), ValidationEr
     }
 }
 
-/// Só dá para comparar as datas aqui quando as duas vieram na requisição;
-/// quando só uma veio, o banco valida contra a data já salva (CHECK constraint).
+
 fn validate_update_period(request: &UpdateExperienceRequest) -> Result<(), ValidationError> {
     match (request.start_date, request.end_date) {
         (Some(start), Some(end)) if end < start => Err(period_error()),

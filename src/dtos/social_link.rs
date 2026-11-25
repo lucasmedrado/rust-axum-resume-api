@@ -21,7 +21,7 @@ pub struct CreateSocialLinkRequest {
     pub url: String,
 }
 
-/// Todos os campos são opcionais: só o que for enviado é alterado.
+
 #[derive(Debug, Deserialize, Validate)]
 pub struct UpdateSocialLinkRequest {
     #[validate(length(

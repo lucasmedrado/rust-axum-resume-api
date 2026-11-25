@@ -1,4 +1,4 @@
-//! Tipo de erro único da aplicação e sua conversão para respostas HTTP.
+
 
 use std::collections::HashMap;
 
@@ -19,11 +19,11 @@ pub enum AppError {
     #[error("{0}")]
     Conflict(&'static str),
 
-    /// Requisição malformada (ex.: JSON inválido).
+    
     #[error("{0}")]
     BadRequest(String),
 
-    /// Requisição bem formada, mas que viola uma regra de negócio.
+    
     #[error("{0}")]
     Unprocessable(&'static str),
 
@@ -62,7 +62,7 @@ impl IntoResponse for AppError {
         };
 
         let body = match &self {
-            // Detalhes internos vão para o log, nunca para o cliente.
+            
             AppError::Database(_) | AppError::Internal(_) => {
                 tracing::error!(error = %self, "erro interno");
                 json!({ "error": "erro interno do servidor" })
@@ -78,7 +78,7 @@ impl IntoResponse for AppError {
     }
 }
 
-/// Converte os erros do `validator` em `{ "campo": ["mensagem", ...] }`.
+
 fn field_messages(errors: &ValidationErrors) -> HashMap<String, Vec<String>> {
     errors
         .field_errors()
@@ -96,7 +96,7 @@ fn field_messages(errors: &ValidationErrors) -> HashMap<String, Vec<String>> {
         .collect()
 }
 
-/// Se `err` for uma violação de UNIQUE, devolve o nome da constraint violada.
+
 pub fn unique_violation(err: &sqlx::Error) -> Option<&str> {
     let db_err = err.as_database_error()?;
     if db_err.is_unique_violation() {

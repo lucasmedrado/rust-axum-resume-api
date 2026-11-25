@@ -1,5 +1,3 @@
-//! Regras de negócio. Orquestram repositórios, hash de senha e JWT.
-
 pub mod academic_education_service;
 pub mod certification_service;
 pub mod experience_service;

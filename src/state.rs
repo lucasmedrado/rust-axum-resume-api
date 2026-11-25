@@ -4,8 +4,7 @@ use sqlx::PgPool;
 
 use crate::config::Config;
 
-/// Estado compartilhado entre todas as requisições.
-/// `Clone` é barato: `PgPool` e `Arc` apenas incrementam um contador.
+
 #[derive(Clone)]
 pub struct AppState {
     pub pool: PgPool,

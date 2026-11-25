@@ -39,7 +39,7 @@ pub async fn find_by_email(pool: &PgPool, email: &str) -> AppResult<Option<User>
     Ok(user)
 }
 
-/// Atualiza apenas os campos `Some`; `None` mantém o valor atual.
+
 pub async fn update(
     pool: &PgPool,
     id: Uuid,
@@ -61,7 +61,7 @@ pub async fn update(
     .map_err(map_write_error)
 }
 
-/// Devolve `true` se o usuário existia e foi removido.
+
 pub async fn delete(pool: &PgPool, id: Uuid) -> AppResult<bool> {
     let result = sqlx::query("DELETE FROM users WHERE id = $1")
         .bind(id)

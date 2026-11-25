@@ -1,4 +1,4 @@
-//! Camada HTTP: extrai os dados da requisição, chama um serviço e monta a resposta.
+
 
 pub mod academic_education_handler;
 pub mod certification_handler;

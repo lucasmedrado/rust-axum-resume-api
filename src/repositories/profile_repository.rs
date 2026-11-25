@@ -39,7 +39,7 @@ pub async fn find_by_user_id(pool: &PgPool, user_id: Uuid) -> AppResult<Option<P
     Ok(profile)
 }
 
-/// Atualiza apenas os campos `Some`; `None` mantém o valor atual.
+
 pub async fn update(
     pool: &PgPool,
     user_id: Uuid,
@@ -68,7 +68,7 @@ pub async fn update(
     .map_err(map_write_error)
 }
 
-/// Devolve `true` se o perfil existia e foi removido.
+
 pub async fn delete(pool: &PgPool, user_id: Uuid) -> AppResult<bool> {
     let result = sqlx::query("DELETE FROM profiles WHERE user_id = $1")
         .bind(user_id)

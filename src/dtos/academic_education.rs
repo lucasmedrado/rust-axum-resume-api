@@ -35,7 +35,7 @@ pub struct CreateAcademicEducationRequest {
     pub end_date: Option<NaiveDate>,
 }
 
-/// Todos os campos são opcionais: só o que for enviado é alterado.
+
 #[derive(Debug, Deserialize, Validate)]
 #[validate(schema(function = "validate_update_period"))]
 pub struct UpdateAcademicEducationRequest {

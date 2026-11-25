@@ -13,7 +13,7 @@ use crate::state::AppState;
 pub fn build_router(state: AppState) -> Router {
     Router::new()
         .route("/health", get(health)) 
-        // Autenticação e usuário
+        
         .route("/auth/login", post(user_handler::login))
         .route("/users", post(user_handler::register))
         .route(
@@ -22,7 +22,7 @@ pub fn build_router(state: AppState) -> Router {
                 .patch(user_handler::update_me)
                 .delete(user_handler::delete_me),
         )
-        // Perfil (um por usuário)
+        
         .route(
             "/profiles/me",
             post(profile_handler::create)
@@ -30,7 +30,7 @@ pub fn build_router(state: AppState) -> Router {
                 .patch(profile_handler::update)
                 .delete(profile_handler::delete),
         )
-        // Experiências (várias por perfil)
+        
         .route(
             "/experiences",
             get(experience_handler::list).post(experience_handler::create),
@@ -39,7 +39,7 @@ pub fn build_router(state: AppState) -> Router {
             "/experiences/{id}",
             patch(experience_handler::update).delete(experience_handler::delete),
         )
-        // Formações acadêmicas (várias por perfil)
+        
         .route(
             "/academic-educations",
             get(academic_education_handler::list).post(academic_education_handler::create),
@@ -48,7 +48,7 @@ pub fn build_router(state: AppState) -> Router {
             "/academic-educations/{id}",
             patch(academic_education_handler::update).delete(academic_education_handler::delete),
         )
-        // Certificações (várias por perfil)
+        
         .route(
             "/certifications",
             get(certification_handler::list).post(certification_handler::create),
@@ -57,7 +57,7 @@ pub fn build_router(state: AppState) -> Router {
             "/certifications/{id}",
             patch(certification_handler::update).delete(certification_handler::delete),
         )
-        // Habilidades (várias por perfil)
+        
         .route(
             "/skills",
             get(skill_handler::list).post(skill_handler::create),
@@ -66,7 +66,7 @@ pub fn build_router(state: AppState) -> Router {
             "/skills/{id}",
             patch(skill_handler::update).delete(skill_handler::delete),
         )
-        // Links sociais (vários por perfil)
+        
         .route(
             "/social-links",
             get(social_link_handler::list).post(social_link_handler::create),
